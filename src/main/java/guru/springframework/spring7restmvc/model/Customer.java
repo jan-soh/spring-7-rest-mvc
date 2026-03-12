@@ -1,5 +1,7 @@
 package guru.springframework.spring7restmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,6 +11,7 @@ import java.util.UUID;
 
 @Builder
 @Data
+@AllArgsConstructor(onConstructor_ = {@JsonCreator})
 public class Customer {
 
     private UUID id;
