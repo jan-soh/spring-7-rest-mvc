@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.feed.AbstractRssFeedView;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +20,14 @@ public class BeerController {
 
     private final BeerService beerService;
 
+    @PatchMapping("{beerId}")
+    public ResponseEntity patchById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+
+        beerService.patchBeerById(beerId, beer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
     @DeleteMapping("{beerId}")
     public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId) {
 
@@ -30,7 +37,7 @@ public class BeerController {
     }
 
     @PutMapping("{beerId}")
-    public ResponseEntity updateById(@PathVariable UUID beerId, @RequestBody  Beer beer) {
+    public ResponseEntity updateById(@PathVariable UUID beerId, @RequestBody Beer beer) {
 
         beerService.updateBeerById(beerId, beer);
 
