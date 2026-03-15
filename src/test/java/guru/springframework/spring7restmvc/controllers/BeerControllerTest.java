@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static guru.springframework.spring7restmvc.controllers.BeerController.BEER_PATH;
+import static guru.springframework.spring7restmvc.controllers.BeerController.BEER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,7 +66,7 @@ class BeerControllerTest {
         Beer beer = beerServiceImpl.listBeers().get(0);
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
-        mockMvc.perform(patch(BEER_PATH + "/" + beer.getId())
+        mockMvc.perform(patch(BEER_PATH_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
@@ -82,7 +83,7 @@ class BeerControllerTest {
 
         Beer beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(delete(BEER_PATH + "/" + beer.getId())).andExpect(status().isNoContent());
+        mockMvc.perform(delete(BEER_PATH_ID, beer.getId())).andExpect(status().isNoContent());
 
         verify(beerService).deleteById(uuidArgumentCaptor.capture());
 
@@ -92,7 +93,7 @@ class BeerControllerTest {
     @Test
     void testUpdateBeer() throws Exception {
         Beer beer = beerServiceImpl.listBeers().get(0);
-        mockMvc.perform(put(BEER_PATH + "/" + beer.getId())
+        mockMvc.perform(put(BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
@@ -136,7 +137,7 @@ class BeerControllerTest {
 
         given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
 
-        mockMvc.perform(get(BEER_PATH + "/" + testBeer.getId())
+        mockMvc.perform(get(BEER_PATH_ID, testBeer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
