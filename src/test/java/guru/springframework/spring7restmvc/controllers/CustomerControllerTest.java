@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static guru.springframework.spring7restmvc.controllers.BeerController.BEER_PATH_ID;
+import static guru.springframework.spring7restmvc.controllers.CustomerController.CUSTOMER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,6 +56,12 @@ class CustomerControllerTest {
     @Captor
     ArgumentCaptor<Customer> customerArgumentCaptor;
 
+    @Test
+    void getCustomerByIdNotFound() throws Exception {
+
+        given(customerService.getCustomerById(any(UUID.class))).willThrow(NotFoundException.class);
+        mockMvc.perform(get(CUSTOMER_PATH_ID, UUID.randomUUID())).andExpect(status().isNotFound());
+    }
     @Test
     void testPatchCustomer() throws Exception {
         Customer customer = customerServiceImpl.listCustomer().get(0);
