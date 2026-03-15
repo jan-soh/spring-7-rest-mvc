@@ -18,6 +18,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static guru.springframework.spring7restmvc.controllers.BeerController.BEER_PATH_ID;
@@ -59,7 +60,7 @@ class CustomerControllerTest {
     @Test
     void getCustomerByIdNotFound() throws Exception {
 
-        given(customerService.getCustomerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(CUSTOMER_PATH_ID, UUID.randomUUID())).andExpect(status().isNotFound());
     }
 
@@ -142,7 +143,7 @@ class CustomerControllerTest {
 
         Customer testCustomer = customerServiceImpl.listCustomer().get(0);
 
-        given(customerService.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
+        given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 
         mockMvc.perform(get("/api/v1/customer/" + testCustomer.getId())
                         .accept(MediaType.APPLICATION_JSON))
