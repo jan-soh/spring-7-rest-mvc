@@ -5,24 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
 @Data
-//@AllArgsConstructor(onConstructor_ = {@JsonCreator}) // better use that one below!
-@JsonDeserialize(builder = Beer.BeerBuilder.class)
-public class Beer {
+//@AllArgsConstructor(onConstructor_ = {@JsonCreator})
+@JsonDeserialize(builder = CustomerDTO.CustomerDTOBuilder.class)
+public class CustomerDTO {
 
     private UUID id;
     private Integer version;
-    @JsonProperty("beerName")
-    private String beerName;
-    private BeerStyle beerStyle;
-    private String upc;
-    private Integer quantityOnHand;
-    private BigDecimal price;
+    @JsonProperty("customerName")
+    private String customerName;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }
