@@ -6,17 +6,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Created by jt, Spring Framework Guru.
+ */
 public interface CustomerService {
 
-    List<CustomerDTO> listCustomer();
+    Optional<CustomerDTO> getCustomerById(UUID uuid);
 
-    Optional<CustomerDTO> getCustomerById(UUID customerId);
+    List<CustomerDTO> getAllCustomers();
 
-    CustomerDTO saveCustomer(CustomerDTO customer);
+    CustomerDTO saveNewCustomer(CustomerDTO customer);
 
-    void updateCustomerById(UUID customerId, CustomerDTO customer);
+    Optional<CustomerDTO> updateCustomerById(UUID customerId, CustomerDTO customer);
 
-    void deleteById(UUID customerId);
+    Boolean deleteCustomerById(UUID customerId);
 
-    void patchCustomerById(UUID customerId, CustomerDTO customer);
+    Optional<CustomerDTO> patchCustomerById(UUID customerId, CustomerDTO customer);
 }

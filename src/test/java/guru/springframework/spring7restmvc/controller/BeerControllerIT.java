@@ -1,16 +1,16 @@
-package guru.springframework.spring7restmvc.controllers;
+package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring7restmvc.entities.Beer;
-import guru.springframework.spring7restmvc.mappers.BeerMapper;
 import guru.springframework.spring7restmvc.model.BeerDTO;
 import guru.springframework.spring7restmvc.repositories.BeerRepository;
-import jakarta.transaction.Transactional;
+import guru.springframework.spring7restmvc.entities.Beer;
+import guru.springframework.spring7restmvc.mappers.BeerMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class BeerControllerIT {
-
     @Autowired
     BeerController beerController;
 
@@ -30,8 +29,9 @@ class BeerControllerIT {
     @Autowired
     BeerMapper beerMapper;
 
+
     @Test
-    void deleteByIdNotFound() {
+    void testDeleteByIDNotFound() {
         assertThrows(NotFoundException.class, () -> {
             beerController.deleteById(UUID.randomUUID());
         });
@@ -41,25 +41,25 @@ class BeerControllerIT {
     @Transactional
     @Test
     void deleteByIdFound() {
-
         Beer beer = beerRepository.findAll().get(0);
 
         ResponseEntity responseEntity = beerController.deleteById(beer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        assertThat(beerRepository.findById(beer.getId())).isEmpty();
+        assertThat(beerRepository.findById(beer.getId()).isEmpty());
     }
 
     @Test
-    void updateNotFoundException() {
+    void testUpdateNotFound() {
         assertThrows(NotFoundException.class, () -> {
             beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build());
         });
     }
 
+    @Rollback
+    @Transactional
     @Test
     void updateExistingBeer() {
-
         Beer beer = beerRepository.findAll().get(0);
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
         beerDTO.setId(null);
@@ -71,7 +71,6 @@ class BeerControllerIT {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         Beer updatedBeer = beerRepository.findById(beer.getId()).get();
-
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
     }
 
@@ -80,7 +79,8 @@ class BeerControllerIT {
     @Test
     void saveNewBeerTest() {
         BeerDTO beerDTO = BeerDTO.builder()
-                .beerName("New Beer").build();
+                .beerName("New Beer")
+                .build();
 
         ResponseEntity responseEntity = beerController.handlePost(beerDTO);
 
@@ -92,7 +92,6 @@ class BeerControllerIT {
 
         Beer beer = beerRepository.findById(savedUUID).get();
         assertThat(beer).isNotNull();
-
     }
 
     @Test
@@ -105,28 +104,33 @@ class BeerControllerIT {
     @Test
     void testGetById() {
         Beer beer = beerRepository.findAll().get(0);
-        BeerDTO beerDTO = beerController.getBeerById(beer.getId());
 
-        assertThat(beerDTO).isNotNull();
+        BeerDTO dto = beerController.getBeerById(beer.getId());
+
+        assertThat(dto).isNotNull();
     }
 
     @Test
     void testListBeers() {
+        List<BeerDTO> dtos = beerController.listBeers();
 
-        List<BeerDTO> beers = beerController.listBeers();
-
-        assertThat(beers.size()).isEqualTo(3);
+        assertThat(dtos.size()).isEqualTo(3);
     }
 
     @Rollback
     @Transactional
     @Test
     void testEmptyList() {
-
         beerRepository.deleteAll();
-        List<BeerDTO> beers = beerController.listBeers();
+        List<BeerDTO> dtos = beerController.listBeers();
 
-        assertThat(beers.size()).isEqualTo(0);
-
+        assertThat(dtos.size()).isEqualTo(0);
     }
 }
+
+
+
+
+
+
+

@@ -7,6 +7,9 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Created by jt, Spring Framework Guru.
+ */
 @Getter
 @Setter
 @Builder
@@ -14,15 +17,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
-
     @Id
-    @GeneratedValue(generator = "UUDI")
+    @GeneratedValue(generator = "UUID")
     @UuidGenerator
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
+    private String name;
+
     @Version
     private Integer version;
-    private String customerName;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }

@@ -9,20 +9,35 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Created by jt, Spring Framework Guru.
+ */
+@JsonDeserialize(builder = BeerDTO.BeerDTOBuilder.class)
 @Builder
 @Data
-//@AllArgsConstructor(onConstructor_ = {@JsonCreator}) // better use that one below!
-@JsonDeserialize(builder = BeerDTO.BeerDTOBuilder.class)
 public class BeerDTO {
 
+    @JsonProperty("id")
     private UUID id;
+
+    @JsonProperty("version")
     private Integer version;
+
     @JsonProperty("beerName")
     private String beerName;
+
+    @JsonProperty("beerStyle")
     private BeerStyle beerStyle;
+
+    @JsonProperty("upc")
     private String upc;
+
+    @JsonProperty("quantityOnHand")
     private Integer quantityOnHand;
+
+    @JsonProperty("price")
     private BigDecimal price;
+
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }

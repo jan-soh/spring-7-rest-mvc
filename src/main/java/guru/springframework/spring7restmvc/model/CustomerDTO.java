@@ -8,16 +8,22 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Builder
-@Data
-//@AllArgsConstructor(onConstructor_ = {@JsonCreator})
+/**
+ * Created by jt, Spring Framework Guru.
+ */
 @JsonDeserialize(builder = CustomerDTO.CustomerDTOBuilder.class)
+@Data
+@Builder
 public class CustomerDTO {
-
+    @JsonProperty("id")
     private UUID id;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("version")
     private Integer version;
-    @JsonProperty("customerName")
-    private String customerName;
+
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }
