@@ -1,8 +1,10 @@
 package guru.springframework.spring7restmvc.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.math.BigDecimal;
@@ -23,6 +25,8 @@ public class BeerDTO {
     @JsonProperty("version")
     private Integer version;
 
+    @NotBlank
+    @NonNull
     @JsonProperty("beerName")
     private String beerName;
 

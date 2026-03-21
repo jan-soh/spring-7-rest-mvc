@@ -14,6 +14,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
@@ -56,6 +57,22 @@ class BeerControllerTest {
     }
 
     @Test
+    void testCreateBeerNullBerName() throws Exception {
+
+        BeerDTO beerDTO = BeerDTO.builder().build();
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
+
+        MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(objectMapper.writeValueAsString(beerDTO))))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        
+    }
+
+    @Test
     void testPatchBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.listBeers().get(0);
 
@@ -63,8 +80,8 @@ class BeerControllerTest {
         beerMap.put("beerName", "New Name");
 
         mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isNoContent());
 
@@ -81,7 +98,7 @@ class BeerControllerTest {
         given(beerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
         verify(beerService).deleteById(uuidArgumentCaptor.capture());
@@ -96,9 +113,9 @@ class BeerControllerTest {
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beer)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isNoContent());
 
         verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
@@ -113,7 +130,7 @@ class BeerControllerTest {
         given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
         mockMvc.perform(post(BeerController.BEER_PATH)
-                .accept(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
@@ -125,7 +142,7 @@ class BeerControllerTest {
         given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
 
         mockMvc.perform(get(BeerController.BEER_PATH)
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(3)));
@@ -147,7 +164,7 @@ class BeerControllerTest {
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))
