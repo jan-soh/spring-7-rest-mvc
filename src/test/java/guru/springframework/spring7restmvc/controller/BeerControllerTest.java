@@ -69,7 +69,7 @@ class BeerControllerTest {
                         .content(objectMapper.writeValueAsString(objectMapper.writeValueAsString(beerDTO))))
                 .andExpect(status().isBadRequest()).andReturn();
 
-        
+
     }
 
     @Test
