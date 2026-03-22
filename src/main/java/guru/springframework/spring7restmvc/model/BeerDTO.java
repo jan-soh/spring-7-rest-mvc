@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @JsonDeserialize(builder = BeerDTO.BeerDTOBuilder.class)
 @Builder
 @Data
@@ -30,15 +27,19 @@ public class BeerDTO {
     @JsonProperty("beerName")
     private String beerName;
 
+    @NotNull
     @JsonProperty("beerStyle")
     private BeerStyle beerStyle;
 
+    @NotBlank
+    @NotNull
     @JsonProperty("upc")
     private String upc;
 
     @JsonProperty("quantityOnHand")
     private Integer quantityOnHand;
 
+    @NotNull
     @JsonProperty("price")
     private BigDecimal price;
 
