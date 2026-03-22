@@ -57,7 +57,7 @@ class BeerControllerTest {
     }
 
     @Test
-    void testCreateBeerNullBerName() throws Exception {
+    void testCreateBeerNullBeerName() throws Exception {
 
         BeerDTO beerDTO = BeerDTO.builder().build();
 
@@ -66,10 +66,12 @@ class BeerControllerTest {
         MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(objectMapper.writeValueAsString(beerDTO))))
-                .andExpect(status().isBadRequest()).andReturn();
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andReturn();
 
-
+        System.out.println(mvcResult.getResponse().getContentAsString());
     }
 
     @Test

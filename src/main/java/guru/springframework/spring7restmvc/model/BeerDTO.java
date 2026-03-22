@@ -2,9 +2,9 @@ package guru.springframework.spring7restmvc.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ public class BeerDTO {
     private Integer version;
 
     @NotBlank
-    @NonNull
+    @NotNull
     @JsonProperty("beerName")
     private String beerName;
 
